@@ -1,9 +1,11 @@
 package com.glm.mypet.models;
 
+import java.util.Objects;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-
-import java.util.Objects;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "pets")
@@ -13,17 +15,33 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Nome do animal é obrigatório.")
+    @Size(max = 150, message = "O nome do animal deve ter no máximo 150 caracteres.")
     private String name;
+
+    @NotNull(message = "Espécie é obrigatória.")
+    @Size(max = 50, message = "A espécie deve ter no máximo 50 caracteres.")
     private String species;
+
+    @NotNull(message = "Raça é obrigatória.")
+    @Size(max = 50, message = "A raça deve ter no máximo 50 caracteres.")
     private String breed;
+
+    @NotNull(message = "Sexo é obrigatório.")
+    @Size(min = 1, max = 1, message = "Sexo deve ser representado por 'M' ou 'F'.")
+    @Pattern(regexp = "^[MF]$", message = "Sexo deve ser 'M' ou 'F'.")
     private String sex;
 
-    @Min(0)
-    private int age;
+    @NotNull(message = "Idade é obrigatória.")
+    @Min(value = 0, message = "A idade deve ser um valor positivo.")
+    private Integer age;
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
+    @NotNull(message = "Proprietário é obrigatório.")
     private Owner owner;
+
+    // Construtores, getters e setters
 
     public Pet() {
     }
@@ -37,6 +55,7 @@ public class Pet {
         this.owner = owner;
     }
 
+    // Getters e setters
     public Long getId() {
         return id;
     }

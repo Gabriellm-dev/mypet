@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -42,12 +43,39 @@ public class OwnerController {
         return owner.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOwner(@PathVariable Long id) {
-        if (!ownerService.getOwnerById(id).isPresent()) {
+        @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteOwner(@PathVariable Long id) {
+        Optional<Owner> ownerOptional = ownerService.getOwnerById(id);
+        
+        if (!ownerOptional.isPresent()) {
             return ResponseEntity.notFound().build();
         }
+        
+        long petCount = ownerService.countPetsByOwnerId(id);
+        if (petCount > 0) {
+            // Aqui você pode retornar uma mensagem informando sobre a existência de pets
+            return ResponseEntity.badRequest().body("Este proprietário tem pets associados. Não é possível excluir.");
+        }
+
         ownerService.deleteOwner(id);
         return ResponseEntity.noContent().build();
     }
+
+        @GetMapping("/search")
+        public ResponseEntity<?> listOwners(
+                @RequestParam(required = false) Long id,
+                @RequestParam(required = false) String name,
+                @RequestParam(required = false) String email) {
+            
+            List<Owner> owners = ownerService.findOwners(id, name, email);
+            
+            if (owners.isEmpty()) {
+                return ResponseEntity.status(404).body("Nenhum proprietário encontrado com as informações fornecidas.");
+            }
+            
+            return ResponseEntity.ok(owners);
+        }
+    
+
+
 }
