@@ -1,17 +1,12 @@
 package com.glm.mypet.models;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.*;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "pet_history")
 public class PetHistory {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -29,6 +24,7 @@ public class PetHistory {
     @Column(nullable = false)
     private LocalDateTime dateTime;
 
+    // Getters e Setters
     public Integer getId() {
         return id;
     }

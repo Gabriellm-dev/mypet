@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -21,16 +22,23 @@ public class UserController {
         if (userService.existsByEmail(user.getEmail())) {
             return ResponseEntity.badRequest().body("Email já cadastrado.");
         }
-        userService.saveUser(user);
-        return ResponseEntity.status(201).body("Usuário criado com sucesso: ID " + user.getId());
+        User savedUser = userService.saveUser(user);
+        return ResponseEntity.status(201).body("Usuário criado com sucesso: ID " + savedUser.getId());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateUser(@PathVariable Long id, @Valid @RequestBody User user) {
-        if (!userService.getUserById(id).isPresent()) {
+        Optional<User> existingUser = userService.getUserById(id);
+        if (existingUser.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        user.setId(id);
+
+        // Verifica se o email a ser atualizado já está em uso por outro usuário
+        if (!existingUser.get().getEmail().equals(user.getEmail()) && userService.existsByEmail(user.getEmail())) {
+            return ResponseEntity.badRequest().body("Email já cadastrado por outro usuário.");
+        }
+
+        user.setId(id); // Certifica-se de que o ID é o mesmo do usuário a ser atualizado
         userService.saveUser(user);
         return ResponseEntity.ok("Usuário atualizado com sucesso.");
     }
@@ -40,6 +48,7 @@ public class UserController {
         if (!userService.getUserById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
+
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
@@ -47,6 +56,9 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<User>> getUsers() {
         List<User> users = userService.findAll();
+        if (users.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok(users);
     }
 }

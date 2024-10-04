@@ -13,28 +13,30 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Size(max = 150)
+    @NotNull(message = "Nome é obrigatório.")
+    @Size(max = 150, message = "O nome deve ter no máximo 150 caracteres.")
     private String name;
 
-    @NotNull
-    @Size(min = 1, max = 1)
+    @NotNull(message = "Gênero é obrigatório.")
+    @Size(min = 1, max = 1, message = "Gênero deve ser representado por uma letra (M ou F).")
     private String gender;
 
-    @NotNull
-    @Email
-    @Size(max = 150)
+    @NotNull(message = "E-mail é obrigatório.")
+    @Email(message = "E-mail deve ser válido.")
+    @Size(max = 150, message = "O e-mail deve ter no máximo 150 caracteres.")
     @Column(unique = true)
     private String email;
 
-    @NotNull
-    @Size(min = 10, max = 10)
+    @NotNull(message = "Senha é obrigatória.")
+    @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres.")
     private String password;
 
-    @NotNull
-    @Size(max = 10)
+    @NotNull(message = "Grupo é obrigatório.")
+    @Size(max = 10, message = "O grupo deve ter no máximo 10 caracteres.")
+    @Column(name = "user_group")
     private String group;
 
+    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -82,7 +84,4 @@ public class User {
     public void setGroup(String group) {
         this.group = group;
     }
-
-    
 }
-

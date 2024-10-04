@@ -1,277 +1,357 @@
-# Gerenciamento de PetShop
+# MyPet - Sistema de Gerenciamento de Pets
 
----
+MyPet é um sistema completo para o gerenciamento de informações sobre pets, incluindo vacinas, histórico de peso e altura, e muito mais. Este sistema permite que usuários criem, atualizem, deletem e consultem dados sobre seus animais de estimação de maneira fácil e eficiente.
 
-## Linha do Tempo de Usuários
+Observações
 
-### 1. Cadastro de Proprietário
+# Linguagens:
+  - **Java**
 
-**Endpoint:** `POST /owners`
+# Frameworks:
 
-**Descrição:** Um usuário (secretário) insere um novo proprietário no sistema.
+  - **Spring Boot - Framework principal para o desenvolvimento do backend e APIs REST.**
+  - **Spring Data JPA - Para persistência de dados e integração com o banco de dados.**
+  - **Hibernate - Framework de ORM (Object Relational Mapping) que facilita o trabalho com banco de dados relacionais.**
 
-**Exemplo de Requisição:**
-```http
-POST /owners
-Content-Type: application/json
+# Banco de Dados:
 
-{
-  "name": "Maria Silva",
-  "gender": "F",
-  "email": "maria@gmail.com",
-  "phone": "1234567890"
-}
-```
+  - **PostgreSQL - Banco de dados relacional utilizado no projeto.**
 
-**Resposta:**
-```http
-HTTP/1.1 201 Created
-```
+## Funcionalidades
 
-### 2. Cadastro de Pet
+### 1. Usuários
 
-**Endpoint:** `POST /pets`
+- **Cadastrar Usuário**
+- **Atualizar Usuário**
+- **Excluir Usuário**
+- **Listar Usuários**
 
-**Descrição:** O usuário (secretário) cadastra um novo pet associado ao proprietário.
+### 2. Proprietários (Owners)
 
-**Exemplo de Requisição:**
-```http
-POST /pets
-Content-Type: application/json
+- **Cadastrar Proprietário**
+- **Atualizar Proprietário**
+- **Excluir Proprietário**
+- **Listar Proprietários**
 
-{
-  "name": "Rex",
-  "ownerId": 1,
-  "age": 2,
-  "gender": "M",
-  "species": "Cachorro",
-  "breed": "Labrador"
-}
-```
+### 3. Pets
 
-**Resposta:**
-```http
-HTTP/1.1 201 Created
-```
+- **Cadastrar Pet**
+- **Atualizar Pet**
+- **Excluir Pet**
+- **Listar Pets**
 
-### 3. Cadastro de Vacina
+### 4. Vacinas
 
-**Endpoint:** `POST /vaccines`
+- **Cadastrar Vacina**
+- **Atualizar Vacina**
+- **Excluir Vacina**
+- **Listar Vacinas**
 
-**Descrição:** O usuário (veterinário) cadastra uma vacina para um pet.
+### 5. Histórico de Pesos e Alturas
 
-**Exemplo de Requisição:**
-```http
-POST /vaccines
-Content-Type: application/json
+- **Cadastrar Histórico**
+- **Listar Histórico**
 
-{
-  "petId": 1,
-  "vaccineName": "Vacina Antirrábica",
-  "description": "Vacina para prevenção de raiva.",
-  "applicationDate": "2024-09-25",
-  "registrationDate": "2024-09-25T14:30:00"
-}
-```
+## Pré-requisitos
 
-**Resposta:**
-```http
-HTTP/1.1 201 Created
-```
+Antes de começar, certifique-se de ter instalado:
 
-### 4. Cadastro de Histórico de Evolução
+- JDK 11 ou superior
+- Maven
+- PostgreSQL
 
-**Endpoint:** `POST /histories`
+## Instalação
 
-**Descrição:** O usuário (veterinário) registra o histórico de evolução de altura e peso de um pet.
+1. Clone este repositório:
+   ```bash
+   git clone https://github.com/seuusuario/mypet.git
+   cd mypet
+   ```
 
-**Exemplo de Requisição:**
-```http
-POST /histories
-Content-Type: application/json
+2. Configure o banco de dados PostgreSQL:
+   - Crie um banco de dados chamado `mypet`.
+   - Altere as credenciais no arquivo `application.properties` para corresponder ao seu banco de dados.
 
-{
-  "petId": 1,
-  "weight": 25.0,
-  "height": 60.0,
-  "registrationDate": "2024-09-25T14:45:00"
-}
-```
+3. Compile e inicie a aplicação:
+   ```bash
+   mvn clean install
+   mvn spring-boot:run
+   ```
 
-**Resposta:**
-```http
-HTTP/1.1 201 Created
-```
+## Endpoints da API
 
-### 5. Listar Proprietários
+### 1. Usuários
 
-**Endpoint:** `GET /owners`
+#### Criar Usuário
 
-**Descrição:** O usuário (secretário) busca os dados dos proprietários cadastrados.
-
-**Exemplo de Requisição:**
-```http
-GET /owners
-```
-
-**Resposta:**
-```http
-HTTP/1.1 200 OK
-
-[
+- **Endpoint:** `POST /api/users`
+- **Corpo da Requisição:**
+  ```json
   {
-    "id": 1,
-    "name": "Maria Silva",
-    "gender": "F",
-    "email": "maria@gmail.com",
-    "phone": "1234567890"
-  }
-]
-```
-
-### 6. Listar Pets
-
-**Endpoint:** `GET /pets`
-
-**Descrição:** O usuário (secretário) busca os dados dos pets cadastrados.
-
-**Exemplo de Requisição:**
-```http
-GET /pets
-```
-
-**Resposta:**
-```http
-HTTP/1.1 200 OK
-
-[
-  {
-    "id": 1,
-    "name": "Rex",
-    "ownerId": 1,
-    "age": 2,
+      "name": "João Silva",
     "gender": "M",
-    "species": "Cachorro",
-    "breed": "Labrador"
+    "email": "joao.silva@example.com",
+    "password": "senhaSegura123",
+    "group": "admin"
   }
-]
-```
-
-### 7. Listar Vacinas
-
-**Endpoint:** `GET /vaccines`
-
-**Descrição:** O usuário (veterinário) busca as vacinas aplicadas aos pets.
-
-**Exemplo de Requisição:**
-```http
-GET /vaccines?petId=1
-```
-
-**Resposta:**
-```http
-HTTP/1.1 200 OK
-
-[
+  ```
+- **Resposta:**
+  ```json
   {
-    "id": 1,
-    "petId": 1,
-    "vaccineName": "Vacina Antirrábica",
-    "description": "Vacina para prevenção de raiva.",
-    "applicationDate": "2024-09-25",
-    "registrationDate": "2024-09-25T14:30:00"
+      "message": "Usuário criado com sucesso: ID 1"
   }
-]
-```
+  ```
 
-### 8. Listar Histórico de Evolução
+#### Listar Usuários
 
-**Endpoint:** `GET /histories`
+- **Endpoint:** `GET /users`
+- **Resposta:**
+  ```json
+  [
+      {
+      "name": "João Silva",
+    "gender": "M",
+    "email": "joao.silva@example.com",
+    "password": "senhaSegura123",
+    "group": "admin"
+  }
+  ]
+  ```
 
-**Descrição:** O usuário (veterinário) busca o histórico de evolução de altura e peso de um pet.
+### 2. Proprietários (Owners)
 
-**Exemplo de Requisição:**
-```http
-GET /histories?petId=1
-```
+#### Criar Proprietário
 
-**Resposta:**
-```http
-HTTP/1.1 200 OK
-
-[
+- **Endpoint:** `POST /owners`
+- **Corpo da Requisição:**
+  ```json
   {
-    "id": 1,
-    "petId": 1,
-    "weight": 25.0,
-    "height": 60.0,
-    "registrationDate": "2024-09-25T14:45:00"
+    "name": "Maria Oliveira",
+    "gender": "F",
+    "cpf": "123.456.789-00",
+    "email": "maria.oliveira@example.com",
+    "cellphone": "(11) 91234-5678"
+  } 
+  ```
+- **Resposta:**
+  ```json
+  {
+      "message": "Proprietário criado com sucesso: ID 1"
   }
-]
-```
+  ```
 
-### 9. Exclusão de Proprietário
+#### Listar Proprietários
 
-**Endpoint:** `DELETE /owners/{id}`
+- **Endpoint:** `GET /owners`
+- **Resposta:**
+  ```json
+  [
+    {
+    "id": 1,
+    "name": "Maria Oliveira",
+    "gender": "F",
+    "cpf": "123.456.789-00",
+    "email": "maria.oliveira@example.com",
+    "cellphone": "(11) 91234-5678",
+    "pets": []
+    }
+  ]
+  ```
 
-**Descrição:** O usuário (secretário) exclui um proprietário do sistema.
+### 3. Pets
 
-**Exemplo de Requisição:**
-```http
-DELETE /owners/1
-```
+#### Criar Pet
 
-**Resposta:**
-```http
-HTTP/1.1 204 No Content
-```
+- **Endpoint:** `POST /pets`
+- **Corpo da Requisição:**
+  ```json
+    {
+      "name": "Rex",
+      "species": "Cão",
+      "breed": "Labrador",
+      "sex": "M",
+      "age": 3,
+      "owner": {
+        "id": 1
+      }
+    }
+  ```
+- **Resposta:**
+  ```json
+  {
+      "message": "Pet criado com sucesso: ID 1"
+  }
+  ```
 
-### 10. Exclusão de Pet
+#### Listar Pets (Acertar)
 
-**Endpoint:** `DELETE /pets/{id}`
+- **Endpoint:** `GET /pets`
+- **Resposta:**
+  ```json
+  [
+      {
+          "id": 1,
+          "name": "Rex",
+          "ownerId": 1,
+          "age": 3,
+          "gender": "Macho",
+          "species": "Cachorro",
+          "breed": "Labrador"
+      }
+  ]
+  ```
 
-**Descrição:** O usuário (secretário) exclui um pet do sistema.
+### 4. Vacinas
 
-**Exemplo de Requisição:**
-```http
-DELETE /pets/1
-```
+#### Criar Vacina
 
-**Resposta:**
-```http
-HTTP/1.1 204 No Content
-```
+- **Endpoint:** `POST api/vaccines`
+- **Corpo da Requisição:**
+  ```json
+  {
+  "name": "Vacina Anti-rábica",
+  "description": "Vacina para prevenção da raiva.",
+  "applicationDate": "2024-10-03",
+  "pet": {
+    "id": 1
+  }
+  }
+  ```
+- **Resposta:**
+  ```json
+  {
+  "id": 1,
+  "name": "Vacina Anti-rábica",
+  "description": "Vacina para prevenção da raiva.",
+  "applicationDate": "2024-10-03",
+  "createdAt": "2024-10-03T21:31:20.187338332"
+  }
+  ```
 
-### 11. Exclusão de Vacina
+#### Listar Vacinas
 
-**Endpoint:** `DELETE /vaccines/{id}`
+- **Endpoint:** `GET /api/vaccines`
+- **Parâmetros Opcionais:**
+  - `petId` - Filtra vacinas pelo ID do pet.
+  - `name` - Filtra vacinas pelo nome.
 
-**Descrição:** O usuário (veterinário) exclui uma vacina aplicada a um pet.
+- **Resposta:**
+  ```json
+  [
+    {
+    "id": 1,
+    "name": "Vacina Anti-rábica",
+    "description": "Vacina para prevenção da raiva.",
+    "applicationDate": "2024-10-03",
+    "createdAt": "2024-10-03T21:31:20.187338"
+    }
+  ] 
+  ```
 
-**Exemplo de Requisição:**
-```http
-DELETE /vaccines/1
-```
+### 5. Histórico de Pesos e Alturas
 
-**Resposta:**
-```http
-HTTP/1.1 204 No Content
-```
+#### Criar Histórico
 
-### 12. Exclusão de Histórico
+- **Endpoint:** `POST /api/pet-history`
+- **Corpo da Requisição:**
+  ```json
+  {
+  "weight": 12.5,
+  "height": 45.0,
+  "dateTime": "2024-10-03T14:30:00",
+  "pet": {
+    "id": 1
+  }
+  }
 
-**Endpoint:** `DELETE /histories/{id}`
+  ```
+- **Resposta:**
+  ```json
+  {
+  "id": 1,
+  "pet": {
+    "id": 1,
+    "name": null,
+    "species": null,
+    "breed": null,
+    "sex": null,
+    "age": null,
+    "vaccines": []
+  },
+  "weight": 12.5,
+  "height": 45.0,
+  "dateTime": "2024-10-03T14:30:00"
+  } 
+  ```
 
-**Descrição:** O usuário (veterinário) exclui um registro do histórico de evolução de um pet.
+#### Listar Histórico (Acertar)
 
-**Exemplo de Requisição:**
-```http
-DELETE /histories/1
-```
+- **Endpoint:** `GET /api/pet-history`
+- **Parâmetro Opcionais:**
+  - `petId` - Filtra o histórico pelo ID do pet.
 
-**Resposta:**
-```http
-HTTP/1.1 204 No Content
-```
+- **Resposta:**
+  ```json
+  [
+      {
+          "id": 1,
+          "petId": 1,
+          "weight": 20.5,
+          "height": 60.0,
+          "dateTime": "2023-10-01T10:00:00"
+      }
+  ]
+  ```
+
+  Para orientar as pessoas a utilizarem o seu projeto no GitHub, você pode adicionar uma seção de **Como Executar o Projeto** no seu README. Vou sugerir um modelo de como organizar essa seção, explicando passo a passo como elas podem clonar, configurar e executar o projeto. Aqui está um exemplo:
 
 ---
+
+## 🚀 Como Executar o Projeto
+
+### Pré-requisitos
+Antes de começar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
+- [Java 17+](https://www.oracle.com/java/technologies/javase-jdk17-downloads.html) (ou versão compatível)
+- [Maven](https://maven.apache.org/) - Para gerenciar as dependências e build do projeto
+- [PostgreSQL](https://www.postgresql.org/) - Banco de dados utilizado pelo projeto
+- [Git](https://git-scm.com/) - Para clonar o repositório
+
+### Passos para Instalação
+
+1. **Clone este repositório**
+   ```
+   git clone https://github.com/Gabriellm-dev/mypet.git
+   ```
+   
+2. **Acesse o diretório do projeto**
+   ```
+   cd seu-repositorio
+   ```
+
+3. **Configure o Banco de Dados**
+   - Crie um banco de dados PostgreSQL com o nome `mypet`.
+   - Configure as credenciais do banco no arquivo `src/main/resources/application.properties`:
+     ```properties
+     spring.datasource.url=jdbc:postgresql://localhost:5432/mypet
+     spring.datasource.username=seu_usuario
+     spring.datasource.password=sua_senha
+     ```
+   - Execute o seguinte comando SQL no PostgreSQL para criar o banco:
+     ```sql
+     CREATE DATABASE mypet;
+     ```
+
+4. **Instale as dependências do projeto**
+   No diretório raiz do projeto, execute o Maven para baixar as dependências:
+   ```
+   mvn clean install
+   ```
+
+5. **Execute o Projeto**
+   Agora que tudo está configurado, você pode executar o projeto com o Maven:
+   ```
+   mvn spring-boot:run
+   ```
+
+6. **Acessando a Aplicação**
+   A aplicação será executada em `http://localhost:8080`. Para acessar as APIs de gerenciamento de pets, você pode usar ferramentas como o Postman ou diretamente em seu navegador.

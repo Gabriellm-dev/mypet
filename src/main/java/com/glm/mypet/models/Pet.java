@@ -1,11 +1,15 @@
 package com.glm.mypet.models;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "pets")
@@ -39,14 +43,16 @@ public class Pet {
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     @NotNull(message = "Proprietário é obrigatório.")
+    @JsonBackReference
     private Owner owner;
 
-    // Construtores, getters e setters
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Vaccine> vaccines = new ArrayList<>();
 
-    public Pet() {
-    }
+    public Pet() {}
 
-    public Pet(String name, String species, String breed, String sex, int age, Owner owner) {
+    public Pet(String name, String species, String breed, String sex, Integer age, Owner owner) {
         this.name = name;
         this.species = species;
         this.breed = breed;
@@ -55,7 +61,7 @@ public class Pet {
         this.owner = owner;
     }
 
-    // Getters e setters
+    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -96,11 +102,11 @@ public class Pet {
         this.sex = sex;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
@@ -112,12 +118,36 @@ public class Pet {
         this.owner = owner;
     }
 
+    public List<Vaccine> getVaccines() {
+        return vaccines;
+    }
+
+    public void setVaccines(List<Vaccine> vaccines) {
+        this.vaccines = vaccines;
+    }
+
+    public void addVaccine(Vaccine vaccine) {
+        vaccines.add(vaccine);
+        vaccine.setPet(this); // Assume que Vaccine tem um método setPet()
+    }
+
+    public void removeVaccine(Vaccine vaccine) {
+        vaccines.remove(vaccine);
+        vaccine.setPet(null); // Assume que Vaccine tem um método setPet()
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pet pet = (Pet) o;
-        return age == pet.age && Objects.equals(id, pet.id) && Objects.equals(name, pet.name) && Objects.equals(species, pet.species) && Objects.equals(breed, pet.breed) && Objects.equals(sex, pet.sex) && Objects.equals(owner, pet.owner);
+        return Objects.equals(id, pet.id) &&
+               Objects.equals(name, pet.name) &&
+               Objects.equals(species, pet.species) &&
+               Objects.equals(breed, pet.breed) &&
+               Objects.equals(sex, pet.sex) &&
+               Objects.equals(age, pet.age) &&
+               Objects.equals(owner, pet.owner);
     }
 
     @Override

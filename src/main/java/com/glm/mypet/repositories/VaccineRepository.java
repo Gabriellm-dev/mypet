@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface VaccineRepository extends JpaRepository<Vaccine, Integer> {
-    List<Vaccine> findByPetId(Integer petId);
-    List<Vaccine> findByNameAndPetId(String name, Integer petId);
+    List<Vaccine> findByPetId(Integer petId); // Busca vacinas por ID do pet
+    List<Vaccine> findByNameAndPetId(String name, Integer petId); // Busca vacinas por nome e ID do pet
 }

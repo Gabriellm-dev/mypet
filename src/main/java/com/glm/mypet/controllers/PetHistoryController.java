@@ -23,13 +23,13 @@ public class PetHistoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PetHistory>> list(@RequestParam(required = false) Integer petId) {
+    public ResponseEntity<List<PetHistory>> list(@RequestParam(required = false) Long petId) {  
         List<PetHistory> histories;
         if (petId != null) {
             histories = service.findByPetId(petId);
             if (histories.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(List.of());
+                // Retorne um ResponseEntity vazio ou um status 204 (No Content) ao invés de uma lista de strings
+                return ResponseEntity.noContent().build(); 
             }
         } else {
             return ResponseEntity.badRequest().build();
@@ -37,3 +37,4 @@ public class PetHistoryController {
         return ResponseEntity.ok(histories);
     }
 }
+

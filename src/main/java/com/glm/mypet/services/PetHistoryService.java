@@ -14,10 +14,18 @@ public class PetHistoryService {
     private PetHistoryRepository repository;
 
     public PetHistory save(PetHistory history) {
+        // Aqui você pode adicionar validações adicionais se necessário
+        if (history.getPet() == null) {
+            throw new IllegalArgumentException("O histórico deve estar associado a um Pet.");
+        }
         return repository.save(history);
     }
 
-    public List<PetHistory> findByPetId(Integer petId) {
+    public List<PetHistory> findByPetId(Long petId) {
+        // Você pode querer adicionar uma verificação se petId não é nulo
+        if (petId == null) {
+            throw new IllegalArgumentException("O ID do Pet não pode ser nulo.");
+        }
         return repository.findByPetId(petId);
     }
 }

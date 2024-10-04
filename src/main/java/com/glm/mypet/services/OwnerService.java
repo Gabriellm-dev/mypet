@@ -19,7 +19,7 @@ public class OwnerService {
         try {
             return ownerRepository.save(owner);
         } catch (Exception e) {
-            // Log do erro
+            // Log do erro (adicionar log, se necessário)
             throw new RuntimeException("Erro ao salvar o proprietário: " + e.getMessage(), e);
         }
     }
@@ -47,19 +47,21 @@ public class OwnerService {
     public long countPetsByOwnerId(Long ownerId) {
         return ownerRepository.findById(ownerId)
             .map(owner -> owner.getPets().size())
-            .orElse((int) 0L);
+            .orElse((int) 0L); // Retorna 0L diretamente
     }
 
     public List<Owner> findOwners(Long id, String name, String email) {
-    // Implementar a lógica de busca no banco de dados, talvez usando o OwnerRepository
-    return ownerRepository.findAll() // ou uma consulta personalizada
-        .stream()
-        .filter(owner -> (id == null || owner.getId().equals(id)) &&
-                        (name == null || owner.getName().contains(name)) &&
-                        (email == null || owner.getEmail().contains(email)))
-        .collect(Collectors.toList());
-}
+        // Implementar a lógica de busca no banco de dados, talvez usando o OwnerRepository
+        return ownerRepository.findAll()
+            .stream()
+            .filter(owner -> (id == null || owner.getId().equals(id)) &&
+                             (name == null || owner.getName().contains(name)) &&
+                             (email == null || owner.getEmail().contains(email)))
+            .collect(Collectors.toList());
+    }
 
-    
-    
+    public List<Owner> findAllOwners() {
+        // Método para retornar todos os proprietários
+        return ownerRepository.findAll(); // Chama o repositório para obter todos os proprietários
+    }
 }
